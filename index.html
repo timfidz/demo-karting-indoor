@@ -119,8 +119,6 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .titre, .descendre { animation: none; opacity: 1; transform: none; }
-      .descendre { transform: translateX(-50%); }
       .voir { opacity: 1; transform: none; transition: none; }
     }
   </style>
@@ -243,7 +241,6 @@
       var filetLong = 0.16 * total;
       var depart = 248;          // la ligne de départ, en unités du tracé
       var tour = 11000;          // durée d'un tour, en ms
-      var calme = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       function placer(avance) {
         var pos = (depart + avance) % total;
@@ -262,12 +259,8 @@
       }
 
       var fige = new URLSearchParams(location.search).get('fige');
-      if (calme && fige === null) {
-        // Sans animation : la piste entière est éclairée, sans lumière mobile
-        for (var i = 0; i < sillage.length; i++) sillage[i].removeAttribute('stroke-dasharray');
-        halo.setAttribute('r', 0); lueur.setAttribute('r', 0); point.setAttribute('r', 0);
-        filet.setAttribute('stroke-opacity', 0);
-      } else {
+      // La lumière tourne même si l'appareil demande moins d'animations : elle est l'objet de la page
+      {
         if (fige !== null) {
           placer(parseFloat(fige) * total + total);
         } else {
